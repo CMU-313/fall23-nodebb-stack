@@ -8,6 +8,7 @@
         <i class="fa fa-fw fa-inbox"></i><span class="visible-sm-inline visible-md-inline visible-lg-inline"></span>
     </button>
     <!-- ENDIF loggedIn -->
+    <!-- IMPORT partials/category/search.tpl -->
 
     <!-- IMPORT partials/topic/watch.tpl -->
 
