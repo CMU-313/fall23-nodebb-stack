@@ -7,7 +7,8 @@ define('topicList', [
     'categoryFilter',
     'forum/category/tools',
     'hooks',
-], function (infinitescroll, handleBack, topicSelect, categoryFilter, categoryTools, hooks) {
+    'search',
+], function (infinitescroll, handleBack, topicSelect, categoryFilter, categoryTools, hooks, search) {
     const TopicList = {};
     let templateName = '';
 
@@ -25,6 +26,7 @@ define('topicList', [
     });
 
     TopicList.init = function (template, cb) {
+        TopicList.getTopicsBySearch();
         topicListEl = findTopicListElement();
 
         templateName = template;
@@ -43,6 +45,8 @@ define('topicList', [
         categoryFilter.init($('[component="category/dropdown"]'), {
             states: states,
         });
+
+
 
         if (!config.usePagination) {
             infinitescroll.init(TopicList.loadMoreTopics);
@@ -83,6 +87,12 @@ define('topicList', [
         TopicList.removeListeners();
         socket.on('event:new_topic', onNewTopic);
         socket.on('event:new_post', onNewPost);
+    };
+
+    TopicList.getTopicsBySearch = function () {
+        search = document.getElementById("search-input").value;
+        console.log(search);
+        console.log("getTopicsBySearch");
     };
 
     TopicList.removeListeners = function () {
@@ -201,7 +211,7 @@ define('topicList', [
     }
 
     function loadTopicsAfter(after, direction, callback) {
-        callback = callback || function () {};
+        callback = callback || function () { };
         const query = utils.params();
         query.page = calculateNextPage(after, direction);
         infinitescroll.loadMoreXhr(query, callback);
