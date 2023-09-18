@@ -7,15 +7,11 @@
 
 <div class="row">
     <div class="category <!-- IF widgets.sidebar.length -->col-lg-9 col-sm-12<!-- ELSE -->col-lg-12<!-- ENDIF widgets.sidebar.length -->">
+        <!-- IMPORT partials/category/subcategory.tpl -->
+
         <div class="topic-list-header clearfix0">
             <a href="{config.relative_path}/compose?cid={cid}" component="category/post" id="new_topic" class="btn btn-primary" data-ajaxify="false" role="button">[[category:new_topic_button]]</a>
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="category <!-- IF widgets.sidebar.length -->col-lg-9 col-sm-12<!-- ELSE -->col-lg-12<!-- ENDIF widgets.sidebar.length -->">
-        <!-- IMPORT partials/category/subcategory.tpl -->
 
         <div class="topic-list-header clearfix">
             <!-- IF privileges.topics:create -->
