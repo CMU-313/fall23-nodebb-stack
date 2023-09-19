@@ -10,7 +10,9 @@
         <!-- IMPORT partials/category/subcategory.tpl -->
 
         <div class="folder-list-header">
-            <!-- IMPORT partials/category/files.tpl -->
+            <span class="pull-left" component="category/controls">
+                <!-- IMPORT partials/category/files.tpl -->
+            </span>
         </div>
 
         <div class="topic-list-header clearfix">
