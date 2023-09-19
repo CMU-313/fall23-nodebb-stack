@@ -1,4 +1,5 @@
 'use strict';
+const db = require('../database');
 
 define('topicList', [
     'forum/infinitescroll',
@@ -25,6 +26,9 @@ define('topicList', [
     });
 
     TopicList.init = function (template, cb) {
+
+        console.log("INITIALIZE");
+        TopicList.getTopicsBySearch();
         topicListEl = findTopicListElement();
 
         templateName = template;
@@ -67,6 +71,30 @@ define('topicList', [
 
         hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
     };
+
+    TopicList.getTopicsBySearch = async function () {
+        console.log("INSIDE SEARCH");
+        let query = "asdfsdfdAnnouncement 1";
+        if (!query || String(query).length < 2) {
+            return [];
+        }
+        const data = await db.getSortedSetScan({
+            key: 'category:title',
+            match: `*${String(query).toLowerCase()}*`,
+            limit: hardCap || 500,
+        });
+        res = data.map(data => parseInt(data.split(':').pop(), 10));
+        console.log(res);
+        // return res;
+
+
+
+        // search = document.getElementById("search-input").value;
+        // console.log(search);
+        // console.log("getTopicsBySearch");
+    };
+
+
 
     function findTopicListElement() {
         return $('[component="category"]').filter(function (i, e) {
