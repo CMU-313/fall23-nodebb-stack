@@ -1,5 +1,5 @@
 <ul>
-    <!-- IMPORT partials/buttons/newTopic.tpl -->
-    <!-- IMPORT partials/buttons/newTopic.tpl -->
-    <!-- IMPORT partials/buttons/newTopic.tpl -->
+    <!-- IMPORT partials/buttons/specificFolder.tpl -->
+    <!-- IMPORT partials/buttons/specificFolder.tpl -->
+    <!-- IMPORT partials/buttons/specificFolder.tpl -->
 </ul>
