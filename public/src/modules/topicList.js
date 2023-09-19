@@ -1,4 +1,5 @@
 'use strict';
+// const db = require('../../../src/database');
 
 define('topicList', [
     'forum/infinitescroll',
@@ -90,10 +91,7 @@ define('topicList', [
     };
 
     TopicList.getTopicsBySearch = async function () {
-        let db = require('../database');
-        let query = "werweAnnouncement 1";
-        console.log(query);
-        console.log("INSIDE SEARCH");
+        let query = "Announcement 1";
         if (!query || String(query).length < 2) {
             return [];
         }
@@ -104,13 +102,7 @@ define('topicList', [
         });
         res = data.map(data => parseInt(data.split(':').pop(), 10));
         console.log(res);
-        // return res;
-
-
-
-        // search = document.getElementById("search-input").value;
-        // console.log(search);
-        // console.log("getTopicsBySearch");
+        return res;
     };
 
     TopicList.removeListeners = function () {
