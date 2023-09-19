@@ -89,10 +89,28 @@ define('topicList', [
         socket.on('event:new_post', onNewPost);
     };
 
-    TopicList.getTopicsBySearch = function () {
-        search = document.getElementById("search-input").value;
-        console.log(search);
-        console.log("getTopicsBySearch");
+    TopicList.getTopicsBySearch = async function () {
+        let db = require('../database');
+        let query = "werweAnnouncement 1";
+        console.log(query);
+        console.log("INSIDE SEARCH");
+        if (!query || String(query).length < 2) {
+            return [];
+        }
+        const data = await db.getSortedSetScan({
+            key: 'category:title',
+            match: `*${String(query).toLowerCase()}*`,
+            limit: hardCap || 500,
+        });
+        res = data.map(data => parseInt(data.split(':').pop(), 10));
+        console.log(res);
+        // return res;
+
+
+
+        // search = document.getElementById("search-input").value;
+        // console.log(search);
+        // console.log("getTopicsBySearch");
     };
 
     TopicList.removeListeners = function () {
