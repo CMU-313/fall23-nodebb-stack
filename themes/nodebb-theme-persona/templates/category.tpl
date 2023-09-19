@@ -10,7 +10,7 @@
         <!-- IMPORT partials/category/subcategory.tpl -->
 
         <div class="folder-list-header">
-        <p> Placeholder words to see if the bar appears" </p>
+            <!-- IMPORT partials/category/files.tpl -->
         </div>
 
         <div class="topic-list-header clearfix">
