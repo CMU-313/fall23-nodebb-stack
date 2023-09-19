@@ -59,7 +59,6 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
         });
 
         $('#search-form').off('submit').on('submit', function () {
-            console.log("INSIDE SEARCH");
             const input = $(this).find('input');
             const data = Search.getSearchPreferences();
             data.term = input.val();
@@ -217,7 +216,7 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
     };
 
     Search.query = function (data, callback) {
-        callback = callback || function () { };
+        callback = callback || function () {};
         ajaxify.go('search?' + createQueryString(data));
         callback();
     };

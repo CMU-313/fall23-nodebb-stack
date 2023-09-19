@@ -7,8 +7,7 @@ define('topicList', [
     'categoryFilter',
     'forum/category/tools',
     'hooks',
-    'search',
-], function (infinitescroll, handleBack, topicSelect, categoryFilter, categoryTools, hooks, search) {
+], function (infinitescroll, handleBack, topicSelect, categoryFilter, categoryTools, hooks) {
     const TopicList = {};
     let templateName = '';
 
@@ -26,6 +25,7 @@ define('topicList', [
     });
 
     TopicList.init = function (template, cb) {
+        console.log("HIHIHH");
         TopicList.getTopicsBySearch();
         topicListEl = findTopicListElement();
 
