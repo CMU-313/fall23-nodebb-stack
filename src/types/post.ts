@@ -19,4 +19,5 @@ export type PostObject = {
   isMainPost: boolean;
   replies: number;
   endorsements : number;
+  isEndorsed : boolean;
 };

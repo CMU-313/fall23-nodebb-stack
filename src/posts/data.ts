@@ -24,6 +24,14 @@ function modifyPost(post: myPostObject, fields: Array<number>): void {
         if (post.hasOwnProperty('upvotes') && post.hasOwnProperty('downvotes')) {
             post.votes = post.upvotes - post.downvotes;
         }
+        if (post.hasOwnProperty('endorsements') && post.hasOwnProperty('isEndorsed')) {
+            if (post.endorsements > 0) {
+                post.isEndorsed = true;
+            }
+            else {
+                post.isEndorsed = false;
+            }
+        }
         if (post.hasOwnProperty('timestamp')) {
             // The next line calls a function in a module that has not been updated to TS yet
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
