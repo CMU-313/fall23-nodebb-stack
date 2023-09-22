@@ -23,7 +23,6 @@ import { PostObject } from '../types';
 //     replies: number;
 //     endorsements : number;
 //   };
-  
 
 const intFields = [
     'uid', 'pid', 'tid', 'deleted', 'timestamp',
