@@ -3,11 +3,32 @@
 const db = require('../database');
 const plugins = require('../plugins');
 const utils = require('../utils');
+import { PostObject } from '../types';
+
+// type PostObject = {
+//     pid: number;
+//     tid: number;
+//     content: string;
+//     uid: number;
+//     timestamp: number;
+//     deleted: boolean;
+//     upvotes: number;
+//     downvotes: number;
+//     votes: number;
+//     timestampISO: string;
+//     user: UserObjectSlim;
+//     topic: TopicObject;
+//     category: CategoryObject;
+//     isMainPost: boolean;
+//     replies: number;
+//     endorsements : number;
+//   };
+  
 
 const intFields = [
     'uid', 'pid', 'tid', 'deleted', 'timestamp',
     'upvotes', 'downvotes', 'deleterUid', 'edited',
-    'replies', 'bookmarks',
+    'replies', 'bookmarks', 'endorsements'
 ];
 
 module.exports = function (Posts) {
