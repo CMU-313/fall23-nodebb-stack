@@ -10,7 +10,7 @@
         <!-- IMPORT partials/category/subcategory.tpl -->
 
         <div class="folder-list-header">
-            <!-- IMPORT category/files.tpl -->
+            <!-- IMPORT partials/category/files.tpl -->
         </div>
 
         <div class="topic-list-header clearfix">
