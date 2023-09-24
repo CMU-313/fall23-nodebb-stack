@@ -34,11 +34,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const db = __importStar(require("../database"));
 const plugins = __importStar(require("../plugins"));
 const utils = __importStar(require("../utils"));
-//Referenced @phyllis-feng’s TypeScript translation from P1: https://github.com/CMU-313/NodeBB/pull/243/files
+// Referenced @phyllis-feng’s TypeScript translation from P1: https://github.com/CMU-313/NodeBB/pull/243/files
 const intFields = [
     'uid', 'pid', 'tid', 'deleted', 'timestamp',
     'upvotes', 'downvotes', 'deleterUid', 'edited',
-    'replies', 'bookmarks', 'endorsements'
+    'replies', 'bookmarks', 'endorsements',
 ];
 function modifyPost(post, fields) {
     if (post) {
@@ -49,12 +49,12 @@ function modifyPost(post, fields) {
             post.votes = post.upvotes - post.downvotes;
         }
         if (post.hasOwnProperty('endorsements') && post.hasOwnProperty('isEndorsed')) {
-            if (post.endorsements > 0) {
-                post.isEndorsed = true;
+            if (post.hasOwnProperty('upvotes') && post.hasOwnProperty('downvotes')) {
+                post.endorseVotes = (post.endorsements * 100000000000) + (post.upvotes - post.downvotes);
+                post.endorseVotesRev = (post.endorsements * 100000000000) - (post.upvotes - post.downvotes);
             }
-            else {
-                post.isEndorsed = false;
-            }
+            post.endorsePid = (post.endorsements * 100000000000) + post.pid;
+            post.endorseVotesRev = (post.endorsements * 100000000000) - post.pid;
         }
         if (post.hasOwnProperty('timestamp')) {
             // The next line calls a function in a module that has not been updated to TS yet
@@ -107,6 +107,7 @@ module.exports = function (Posts) {
     Posts.getPostField = function (pid, field) {
         return __awaiter(this, void 0, void 0, function* () {
             const post = yield Posts.getPostFields(pid, [field]);
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return post ? post[field] : null;
         });
     };
