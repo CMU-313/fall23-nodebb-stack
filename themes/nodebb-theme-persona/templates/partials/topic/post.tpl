@@ -78,6 +78,11 @@
 
     <small class="pull-right">
         <!-- IMPORT partials/topic/reactions.tpl -->
+        
+        <!-- IF posts.endorsed -->
+            <i class = "fa fa-star" style="color:gold"></i>
+        <!-- ENDIF posts.endorsed -->     
+        
         <span class="post-tools">
             <a component="post/reply" href="#" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->">[[topic:reply]]</a>
             <a component="post/quote" href="#" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->">[[topic:quote]]</a>
