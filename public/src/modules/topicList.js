@@ -1,4 +1,5 @@
 'use strict';
+// const db = require('../../../src/database');
 
 define('topicList', [
     'forum/infinitescroll',
@@ -25,6 +26,7 @@ define('topicList', [
     });
 
     TopicList.init = function (template, cb) {
+        handleSearch();
         topicListEl = findTopicListElement();
 
         templateName = template;
@@ -43,6 +45,8 @@ define('topicList', [
         categoryFilter.init($('[component="category/dropdown"]'), {
             states: states,
         });
+
+
 
         if (!config.usePagination) {
             infinitescroll.init(TopicList.loadMoreTopics);
@@ -68,6 +72,26 @@ define('topicList', [
         hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
     };
 
+    function handleSearch() {
+        $('#tag-search').on('input propertychange', utils.debounce(function () {
+            socket.emit('topics.searchAndLoadTags', {
+                query: $('#tag-search').val(),
+            }, function (err, result) {
+                if (err) {
+                    return alerts.error(err);
+                }
+
+                app.parseAndTranslate('admin/manage/tags', 'tags', {
+                    tags: result.tags,
+                }, function (html) {
+                    $('.tag-list').html(html);
+                    utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
+                    selectable.enable('.tag-management', '.tag-row');
+                });
+            });
+        }, 250));
+    }
+
     function findTopicListElement() {
         return $('[component="category"]').filter(function (i, e) {
             return !$(e).parents('[widget-area],[data-widget-area]').length;
@@ -83,6 +107,21 @@ define('topicList', [
         TopicList.removeListeners();
         socket.on('event:new_topic', onNewTopic);
         socket.on('event:new_post', onNewPost);
+    };
+
+    TopicList.getTopicsBySearch = async function () {
+        let query = "Announcement 1";
+        if (!query || String(query).length < 2) {
+            return [];
+        }
+        const data = await db.getSortedSetScan({
+            key: 'category:title',
+            match: `*${String(query).toLowerCase()}*`,
+            limit: hardCap || 500,
+        });
+        res = data.map(data => parseInt(data.split(':').pop(), 10));
+        console.log(res);
+        return res;
     };
 
     TopicList.removeListeners = function () {
@@ -201,7 +240,7 @@ define('topicList', [
     }
 
     function loadTopicsAfter(after, direction, callback) {
-        callback = callback || function () {};
+        callback = callback || function () { };
         const query = utils.params();
         query.page = calculateNextPage(after, direction);
         infinitescroll.loadMoreXhr(query, callback);
