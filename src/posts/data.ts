@@ -3,17 +3,17 @@ import * as plugins from '../plugins';
 import * as utils from '../utils';
 import { PostObject } from '../types';
 
-//Referenced @phyllis-feng’s TypeScript translation from P1: https://github.com/CMU-313/NodeBB/pull/243/files
+// Referenced @phyllis-feng’s TypeScript translation from P1: https://github.com/CMU-313/NodeBB/pull/243/files
 
 const intFields: string[] = [
     'uid', 'pid', 'tid', 'deleted', 'timestamp',
     'upvotes', 'downvotes', 'deleterUid', 'edited',
-    'replies', 'bookmarks', 'endorsements'
+    'replies', 'bookmarks', 'endorsements',
 ];
 
 interface myPostObject extends PostObject{
-    edited: number;
-    editedISO: string;
+    edited?: number;
+    editedISO?: string;
 }
 
 function modifyPost(post: myPostObject, fields: Array<number>): void {
@@ -25,12 +25,12 @@ function modifyPost(post: myPostObject, fields: Array<number>): void {
             post.votes = post.upvotes - post.downvotes;
         }
         if (post.hasOwnProperty('endorsements') && post.hasOwnProperty('isEndorsed')) {
-            if (post.endorsements > 0) {
-                post.isEndorsed = true;
+            if (post.hasOwnProperty('upvotes') && post.hasOwnProperty('downvotes')) {
+                post.endorseVotes = (post.endorsements * 100000000000) + (post.upvotes - post.downvotes);
+                post.endorseVotesRev = (post.endorsements * 100000000000) - (post.upvotes - post.downvotes);
             }
-            else {
-                post.isEndorsed = false;
-            }
+            post.endorsePid = (post.endorsements * 100000000000) + post.pid;
+            post.endorseVotesRev = (post.endorsements * 100000000000) - post.pid;
         }
         if (post.hasOwnProperty('timestamp')) {
             // The next line calls a function in a module that has not been updated to TS yet
@@ -56,6 +56,10 @@ type PostType = {
 
 }
 
+type ResultType = {
+    posts: PostObject[];
+}
+
 export = function (Posts: PostType) {
     Posts.getPostsFields = async function (pids: Array<number>, fields: Array<number>): Promise<PostObject[]> {
         if (!Array.isArray(pids) || !pids.length) {
@@ -69,9 +73,9 @@ export = function (Posts: PostType) {
             pids: pids,
             posts: postData,
             fields: fields,
-        });
+        }) as ResultType;
         result.posts.forEach(post => modifyPost(post, fields));
-        return result.posts as PostObject[];
+        return result.posts;
     };
 
     Posts.getPostData = async function (pid: number): Promise<PostObject> {
@@ -90,6 +94,7 @@ export = function (Posts: PostType) {
 
     Posts.getPostField = async function (pid: number, field: number): Promise<PostObject> {
         const post = await Posts.getPostFields(pid, [field]);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return post ? post[field] : null;
     };
 

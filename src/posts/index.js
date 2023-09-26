@@ -70,6 +70,17 @@ Posts.getPidIndex = async function (pid, tid, topicPostSort) {
     return utils.isNumber(index) ? parseInt(index, 10) + 1 : 0;
 };
 
+Posts.getSortType = async function (p, byVotes, reverse) {
+    if (byVotes && reverse) {
+        return `tid:${p.tid}:posts:endorseVotesRev`;
+    } else if (byVotes) {
+        return `tid:${p.tid}:posts:endorseVotes`;
+    } else if (reverse) {
+        return `tid:${p.tid}:posts:endorsePidRev`;
+    }
+    return `tid:${p.tid}:posts:endorsePid`;
+};
+
 Posts.getPostIndices = async function (posts, uid) {
     if (!Array.isArray(posts) || !posts.length) {
         return [];
@@ -77,8 +88,8 @@ Posts.getPostIndices = async function (posts, uid) {
     const settings = await user.getSettings(uid);
 
     const byVotes = settings.topicPostSort === 'most_votes';
-    let sets = posts.map(p => (byVotes ? `tid:${p.tid}:posts:votes` : `tid:${p.tid}:posts`));
     const reverse = settings.topicPostSort === 'newest_to_oldest' || settings.topicPostSort === 'most_votes';
+    let sets = posts.map(p => (this.getSortType(p, reverse, byVotes)));
 
     const uniqueSets = _.uniq(sets);
     let method = reverse ? 'sortedSetsRevRanks' : 'sortedSetsRanks';
