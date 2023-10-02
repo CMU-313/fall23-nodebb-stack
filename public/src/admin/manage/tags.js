@@ -10,7 +10,6 @@ define('admin/manage/tags', [
 
     Tags.init = function () {
         selectable.enable('.tag-management', '.tag-row');
-
         handleCreate();
         handleSearch();
         handleRename();

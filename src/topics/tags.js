@@ -485,6 +485,8 @@ module.exports = function (Topics) {
     }
 
     Topics.searchAndLoadTags = async function (data) {
+        console.log(data);
+        console.log("---------");
         const searchResult = {
             tags: [],
             matchCount: 0,

@@ -14,7 +14,6 @@ define('admin/manage/groups', [
         const createGroupName = $('#create-group-name');
         const createModalGo = $('#create-modal-go');
         const createModalError = $('#create-modal-error');
-
         handleSearch();
 
         createModal.on('keypress', function (e) {
@@ -59,13 +58,13 @@ define('admin/manage/groups', [
             const groupName = el.parents('tr[data-groupname]').attr('data-groupname');
 
             switch (action) {
-            case 'delete':
-                bootbox.confirm('[[admin/manage/groups:alerts.confirm-delete]]', function (confirm) {
-                    if (confirm) {
-                        api.del(`/groups/${slugify(groupName)}`, {}).then(ajaxify.refresh).catch(alerts.error);
-                    }
-                });
-                break;
+                case 'delete':
+                    bootbox.confirm('[[admin/manage/groups:alerts.confirm-delete]]', function (confirm) {
+                        if (confirm) {
+                            api.del(`/groups/${slugify(groupName)}`, {}).then(ajaxify.refresh).catch(alerts.error);
+                        }
+                    });
+                    break;
             }
         });
 

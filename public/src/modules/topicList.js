@@ -26,6 +26,7 @@ define('topicList', [
     });
 
     TopicList.init = function (template, cb) {
+        console.log("INSIDE TOPICLIST");
         handleSearch();
         topicListEl = findTopicListElement();
 
@@ -73,23 +74,37 @@ define('topicList', [
     };
 
     function handleSearch() {
-        $('#tag-search').on('input propertychange', utils.debounce(function () {
-            socket.emit('topics.searchAndLoadTags', {
-                query: $('#tag-search').val(),
-            }, function (err, result) {
-                if (err) {
-                    return alerts.error(err);
-                }
+        $('#tag-search').on('input propertychange', utils.debounce(async function () {
+            if (!$('#tag-search').val().length) {
+                return resetSearch();
+            }
 
-                app.parseAndTranslate('admin/manage/tags', 'tags', {
-                    tags: result.tags,
-                }, function (html) {
-                    $('.tag-list').html(html);
-                    utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
-                    selectable.enable('.tag-management', '.tag-row');
-                });
+            console.log("HIHIHIIINSIDETAGS");
+            if (err) {
+                return alerts.error(err);
+            }
+            data = $('#tag-search').val();
+            console.log(data);
+            const result = await plugins.hooks.fire('filter:search.query', {
+                content: data.query,
+                matchWords: 'all',
+                searchData: data,
+                ids: [],
             });
+            results = Array.isArray(result) ? result : result.ids;
+            console.log(results);
+            onTagsLoaded(results, true);
         }, 250));
+
+    }
+
+    function onTagsLoaded(tags, replace, callback) {
+        callback = callback || function () { };
+        app.parseAndTranslate('topics', 'topics', { tags: tags }, function (html) {
+            $('.topic-list')[replace ? 'html' : 'append'](html);
+            utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
+            callback();
+        });
     }
 
     function findTopicListElement() {

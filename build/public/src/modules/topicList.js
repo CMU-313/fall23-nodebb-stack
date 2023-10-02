@@ -26,8 +26,8 @@ define('topicList', [
     });
 
     TopicList.init = function (template, cb) {
-        console.log("HIHIHH");
-        TopicList.getTopicsBySearch();
+        console.log("INSIDE TOPICLIST");
+        handleSearch();
         topicListEl = findTopicListElement();
 
         templateName = template;
@@ -72,6 +72,39 @@ define('topicList', [
 
         hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
     };
+
+    function handleSearch() {
+        $('#tag-search').on('input propertychange', utils.debounce(async function () {
+            if (!$('#tag-search').val().length) {
+                return resetSearch();
+            }
+
+            console.log("HIHIHIIINSIDETAGS");
+            if (err) {
+                return alerts.error(err);
+            }
+            data = $('#tag-search').val();
+            const result = await plugins.hooks.fire('filter:search.query', {
+                content: data.query,
+                matchWords: 'all',
+                searchData: data,
+                ids: [],
+            });
+            results = Array.isArray(result) ? result : result.ids;
+            console.log(results);
+            onTagsLoaded(results, true);
+        }, 250));
+
+    }
+
+    function onTagsLoaded(tags, replace, callback) {
+        callback = callback || function () { };
+        app.parseAndTranslate('topics', 'topics', { tags: tags }, function (html) {
+            $('.topic-list')[replace ? 'html' : 'append'](html);
+            utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
+            callback();
+        });
+    }
 
     function findTopicListElement() {
         return $('[component="category"]').filter(function (i, e) {
