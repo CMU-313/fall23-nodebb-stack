@@ -73,7 +73,7 @@
           "\n            ") + 
       "\n\n            <a href=\"" + 
       __escape(guard((context != null) ? context['url'] : null)) + 
-      "\" class=\"inline-block\">\n                <div class=\"alert alert-warning hide\" id=\"new-topics-alert\"></div>\n            </a>\n\n            <span class=\"pull-right\" component=\"category/controls\">\n                <div class=\"row\">\n    <div class=\"col-lg-12\">\n        <div class=\"input-group\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"[[global:search]]\" id=\"tag-search\">\n            <span class=\"input-group-addon search-button\"><i class=\"fa fa-search\"></i></span>\n        </div>\n    </div>\n</div>\n                " + 
+      "\" class=\"inline-block\">\n                <div class=\"alert alert-warning hide\" id=\"new-topics-alert\"></div>\n            </a>\n\n            <span class=\"pull-right\" component=\"category/controls\">\n                <div class=\"row\">\n    <div class=\"col-lg-12\">\n        <div class=\"input-group\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"[[global:search]]\" id=\"post-search\">\n            <span class=\"input-group-addon search-button\"><i class=\"fa fa-search\"></i></span>\n        </div>\n    </div>\n</div>\n                " + 
       (guard((context != null && context['config'] != null) ? context['config']['loggedIn'] : null) ?
         "\n<div class=\"btn-group topic-watch-dropdown bottom-sheet\" component=\"topic/watch\">\n\n    <button class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" type=\"button\">\n\n        <span component=\"category/watching/menu\" " + 
           (guard((context != null) ? context['isWatched'] : null) ?

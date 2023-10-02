@@ -1,5 +1,4 @@
 'use strict';
-// const db = require('../../../src/database');
 
 define('topicList', [
     'forum/infinitescroll',
@@ -26,14 +25,14 @@ define('topicList', [
     });
 
     TopicList.init = function (template, cb) {
-        console.log("INSIDE TOPICLIST");
-        handleSearch();
+        console.log()
+        console.log("INIT");
         topicListEl = findTopicListElement();
-
         templateName = template;
         loadTopicsCallback = cb || loadTopicsAfter;
 
         categoryTools.init();
+        handleSearch();
 
         TopicList.watchForNewPosts();
         const states = ['watching'];
@@ -73,34 +72,29 @@ define('topicList', [
         hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
     };
 
+    function resetSearch() {
+        location.reload();
+    }
+
     function handleSearch() {
-        $('#tag-search').on('input propertychange', utils.debounce(async function () {
-            if (!$('#tag-search').val().length) {
+        $('#post-search').on('input propertychange', utils.debounce(async function () {
+            if (!$('#post-search').val().length) {
                 return resetSearch();
             }
-
-            console.log("HIHIHIIINSIDETAGS");
-            if (err) {
-                return alerts.error(err);
-            }
-            data = $('#tag-search').val();
+            const data = $('#post-search').val();
             console.log(data);
-            const result = await plugins.hooks.fire('filter:search.query', {
-                content: data.query,
-                matchWords: 'all',
-                searchData: data,
-                ids: [],
-            });
-            results = Array.isArray(result) ? result : result.ids;
-            console.log(results);
-            onTagsLoaded(results, true);
+            console.log("----------");
+            const results = []
+            onPostsLoaded(results, true);
         }, 250));
 
     }
 
-    function onTagsLoaded(tags, replace, callback) {
+    function onPostsLoaded(posts, replace, callback) {
+        console.log("ONpostsLOADED");
+        console.log(posts);
         callback = callback || function () { };
-        app.parseAndTranslate('topics', 'topics', { tags: tags }, function (html) {
+        app.parseAndTranslate('topics', 'topics', { posts: posts }, function (html) {
             $('.topic-list')[replace ? 'html' : 'append'](html);
             utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
             callback();
@@ -122,21 +116,6 @@ define('topicList', [
         TopicList.removeListeners();
         socket.on('event:new_topic', onNewTopic);
         socket.on('event:new_post', onNewPost);
-    };
-
-    TopicList.getTopicsBySearch = async function () {
-        let query = "Announcement 1";
-        if (!query || String(query).length < 2) {
-            return [];
-        }
-        const data = await db.getSortedSetScan({
-            key: 'category:title',
-            match: `*${String(query).toLowerCase()}*`,
-            limit: hardCap || 500,
-        });
-        res = data.map(data => parseInt(data.split(':').pop(), 10));
-        console.log(res);
-        return res;
     };
 
     TopicList.removeListeners = function () {
