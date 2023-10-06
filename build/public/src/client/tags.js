@@ -52,6 +52,7 @@ define('forum/tags', ['forum/infinitescroll', 'alerts'], function (infinitescrol
     }
 
     function onTagsLoaded(tags, replace, callback) {
+        console.log(tags);
         callback = callback || function () { };
         app.parseAndTranslate('tags', 'tags', { tags: tags }, function (html) {
             $('.tag-list')[replace ? 'html' : 'append'](html);

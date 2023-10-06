@@ -25,7 +25,6 @@ define('topicList', [
     });
 
     TopicList.init = function (template, cb) {
-        console.log()
         console.log("INIT");
         topicListEl = findTopicListElement();
         templateName = template;
@@ -73,18 +72,7 @@ define('topicList', [
     };
 
     function resetSearch() {
-        console.log("RESET");
         location.reload();
-        // socket.emit('topics.loadMoreTopics', {
-        //     after: 1,
-        // }, function (err, data) {
-        //     if (err) {
-        //         return alerts.error(err);
-        //     }
-        //     console.log(data);
-        //     onPostsLoaded(data.topics, true);
-        // });
-        // TopicList.loadMoreTopics;
     }
 
     function handleSearch() {
@@ -92,20 +80,30 @@ define('topicList', [
             if (!$('#post-search').val().length) {
                 return resetSearch();
             }
-            const data = $('#post-search').val();
-            console.log(data);
-            console.log("----------");
-            const results = []
-            onPostsLoaded(results, true);
+
+            const query = $('#post-search').val();
+            const allTopics = ajaxify.data.topics;
+            const subTopics = [];
+            allTopics.forEach((t) => {
+                if (t.title == query) {
+                    subTopics.push({ value: t.title, valueEscaped: t.title, valueEncoded: t.title, class: t.title, score: 1 });
+                }
+
+            })
+            // console.log("subTopicsawt;");
+            // console.log(subTopics);
+            onPostsLoaded(subTopics, true);
         }, 250));
 
     }
 
     function onPostsLoaded(posts, replace, callback) {
-        console.log("ONpostsLOADED");
-        console.log(posts);
         callback = callback || function () { };
         app.parseAndTranslate('topics', 'topics', { posts: posts }, function (html) {
+            console.log(posts);
+            console.log(replace);
+            console.log(html);
+            console.log("html");
             $('.topic-list')[replace ? 'html' : 'append'](html);
             utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
             callback();
