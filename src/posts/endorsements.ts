@@ -62,4 +62,15 @@ export = function (Posts : myPostObject) {
         }
         await Promise.all(promises);
     }
+
+    async function getEndorsementStatusByPostIDs (pids, uid) {
+        if (parseInt(uid, 10) <= 0) {
+            const data = pids.map(() => false);
+            return { endorsements: data };
+        }
+        const endorsementSets = pids.map(pid => `pid:${pid}:endorsements`);
+        return {
+            endorsements: endorsementSets.slice(0, pids.length),
+        };
+    };
 };
