@@ -57,6 +57,7 @@ define('forum/tags', ['forum/infinitescroll', 'alerts'], function (infinitescrol
         callback = callback || function () { };
         app.parseAndTranslate('tags', 'tags', { tags: tags }, function (html) {
             console.log(html);
+            console.log("HTML");
             $('.tag-list')[replace ? 'html' : 'append'](html);
             utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
             callback();

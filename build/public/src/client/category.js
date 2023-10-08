@@ -135,7 +135,7 @@ define('forum/category', [
     };
 
     function loadTopicsAfter(after, direction, callback) {
-        callback = callback || function () {};
+        callback = callback || function () { };
 
         hooks.fire('action:topics.loading');
         const params = utils.params();
