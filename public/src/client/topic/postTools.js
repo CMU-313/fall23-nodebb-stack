@@ -89,7 +89,7 @@ define('forum/topic/postTools', [
         const postContainer = components.get('topic');
 
         handleSelectionTooltip();
-
+        
         postContainer.on('click', '[component="post/quote"]', function () {
             onQuoteClicked($(this), tid);
         });
