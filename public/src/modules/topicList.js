@@ -79,9 +79,18 @@ define('topicList', [
                     subTopics.push(t);
                 }
             })
-            
+            onSearchLoaded(subTopics, true);
         }, 250));
 
+    }
+    
+    function onSearchLoaded(topics, replace, callback) {
+        callback = callback || function () { };
+        app.parseAndTranslate('partials/topics_list', 'topics', { topics: topics }, function (html) {
+            $('.topic-list')[replace ? 'html' : 'append'](html);
+            utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
+            callback();
+        });
     }
 
     function findTopicListElement() {
