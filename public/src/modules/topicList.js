@@ -26,6 +26,7 @@ define('topicList', [
 
     TopicList.init = function (template, cb) {
         topicListEl = findTopicListElement();
+        handleSearch();
 
         templateName = template;
         loadTopicsCallback = cb || loadTopicsAfter;
@@ -67,6 +68,21 @@ define('topicList', [
 
         hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
     };
+
+    function handleSearch() {
+        $('#post-search').on('input propertychange', utils.debounce(async function () {
+            const query = $('#post-search').val();
+            const allTopics = ajaxify.data.topics;
+            const subTopics = [];
+            allTopics.forEach((t) => {
+                if (t.title == query) {
+                    subTopics.push(t);
+                }
+            })
+            
+        }, 250));
+
+    }
 
     function findTopicListElement() {
         return $('[component="category"]').filter(function (i, e) {
