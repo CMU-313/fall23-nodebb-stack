@@ -1,3 +1,5 @@
 'use strict';
-
-module.exports = require('../public/src/modules/topicList');
+const topicList = require('../public/src/modules/topicList');
+console.log(topicList);
+console.log("APOEIRPOER");
+module.exports = topicList;

@@ -1,4 +1,6 @@
 'use strict';
+const ajaxify = require('../ajaxify');
+const window = require('../');
 
 define('topicList', [
     'forum/infinitescroll',
@@ -8,7 +10,8 @@ define('topicList', [
     'forum/category/tools',
     'hooks',
 ], function (infinitescroll, handleBack, topicSelect, categoryFilter, categoryTools, hooks) {
-    const TopicList = {};
+    const TopicList = { handleSearch };
+
     let templateName = '';
 
     let newTopicCount = 0;
@@ -28,7 +31,7 @@ define('topicList', [
         topicListEl = findTopicListElement();
         $('#post-search').on('input propertychange', utils.debounce(async function () {
             const query = $('#post-search').val();
-            TopicList.handleSearch(query);
+            handleSearch(query);
         }, 250));
 
         templateName = template;
@@ -81,7 +84,7 @@ define('topicList', [
         });
     }
 
-    TopicList.handleSearch = async function (query) {
+    async function handleSearch(query) {
         const allTopics = ajaxify.data.topics;
         if (!query.length) {
             resetSearch(allTopics, true);
@@ -314,3 +317,37 @@ define('topicList', [
 
     return TopicList;
 });
+
+// function resetSearch(topics, replace, callback) {
+//     callback = callback || function () { };
+//     app.parseAndTranslate('partials/topics_list', 'topics', { topics: topics }, function (html) {
+//         $('.topic-list')[replace ? 'html' : 'append'](html);
+//         utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
+//         callback();
+//     });
+// }
+
+// function handleSearch(query) {
+//     const allTopics = ajaxify.data.topics;
+//     if (!query.length) {
+//         resetSearch(allTopics, true);
+//     }
+//     const subTopics = [];
+//     allTopics.forEach((t) => {
+//         if (t.title === query) {
+//             subTopics.push(t);
+//         }
+//     });
+//     onSearchLoaded(subTopics, true);
+//     return subTopics;
+// };
+
+// function onSearchLoaded(topics, replace, callback) {
+//     callback = callback || function () { };
+//     app.parseAndTranslate('partials/topics_list', 'topics', { topics: topics }, function (html) {
+//         $('.topic-list')[replace ? 'html' : 'append'](html);
+//         utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
+//         callback();
+//     });
+// }
+// module.exports = { handleSearch };
