@@ -21,14 +21,15 @@ privsPosts.get = async function (pids, uid) {
     }
     const cids = await posts.getCidsByPids(pids);
     const uniqueCids = _.uniq(cids);
+    const userData = await user.getUserData(uid);
 
     const results = await utils.promiseParallel({
         isAdmin: user.isAdministrator(uid),
         isModerator: user.isModerator(uid, uniqueCids),
-        isInstructor: user.accounttype === 'instructor',
+        // isInstructor: user.accounttype === 'instructor',
         isOwner: posts.isOwner(pids, uid),
         'topics:read': helpers.isAllowedTo('topics:read', uid, uniqueCids),
-        'topics:endorse': isInstructor,
+        'topics:endorse': helpers.isAllowedTo('topics:endorse', uid, uniqueCids),
         read: helpers.isAllowedTo('read', uid, uniqueCids),
         'posts:edit': helpers.isAllowedTo('posts:edit', uid, uniqueCids),
         'posts:history': helpers.isAllowedTo('posts:history', uid, uniqueCids),
@@ -38,7 +39,7 @@ privsPosts.get = async function (pids, uid) {
     const isModerator = _.zipObject(uniqueCids, results.isModerator);
     const privData = {};
     privData['topics:read'] = _.zipObject(uniqueCids, results['topics:read']);
-    // privData['topics:endorse'] = _.zipObject(uniqueCids, results['topics:endorse']);
+    privData['topics:endorse'] = _.zipObject(uniqueCids, results['topics:endorse']);
     privData.read = _.zipObject(uniqueCids, results.read);
     privData['posts:edit'] = _.zipObject(uniqueCids, results['posts:edit']);
     privData['posts:history'] = _.zipObject(uniqueCids, results['posts:history']);
@@ -56,7 +57,7 @@ privsPosts.get = async function (pids, uid) {
             move: isAdminOrMod,
             isAdminOrMod: isAdminOrMod,
             'topics:read': privData['topics:read'][cid] || results.isAdmin,
-            'topics:endorse': results.isInstructor,
+            'topics:endorse': isAdminOrMod,
             read: privData.read[cid] || results.isAdmin,
             'posts:history': viewHistory,
             'posts:view_deleted': viewDeletedPosts,

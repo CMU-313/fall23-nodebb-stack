@@ -31,14 +31,14 @@ privsTopics.get = async function (tid, uid) {
     const privData = _.zipObject(privs, userPrivileges);
     const isOwner = uid > 0 && uid === topicData.uid;
     const isAdminOrMod = isAdministrator || isModerator;
-    const isInstructor = (user.accounttype === 'instructor')
+    // const isInstructor = (user.accounttype === 'instructor')
     const editable = isAdminOrMod;
     const deletable = (privData['topics:delete'] && (isOwner || isModerator)) || isAdministrator;
     const mayReply = privsTopics.canViewDeletedScheduled(topicData, {}, false, privData['topics:schedule']);
 
     return await plugins.hooks.fire('filter:privileges.topics.get', {
         'topics:reply': (privData['topics:reply'] && ((!topicData.locked && mayReply) || isModerator)) || isAdministrator,
-        'topics:endorse': privData['topics:endorse'] || isInstructor,
+        'topics:endorse': privData['topics:endorse'] || isAdminOrMod,
         'topics:read': privData['topics:read'] || isAdministrator,
         'topics:schedule': privData['topics:schedule'] || isAdministrator,
         'topics:tag': privData['topics:tag'] || isAdministrator,
@@ -52,7 +52,8 @@ privsTopics.get = async function (tid, uid) {
 
         view_thread_tools: editable || deletable,
         editable: editable,
-        endorsable: isInstructor,
+        // isInstructor: isInstructor,
+        endorsable: isAdminOrMod,
         deletable: deletable,
         view_deleted: isAdminOrMod || isOwner || privData['posts:view_deleted'],
         view_scheduled: privData['topics:schedule'] || isAdministrator,
@@ -176,6 +177,10 @@ privsTopics.isAdminOrMod = async function (tid, uid) {
     const cid = await topics.getTopicField(tid, 'cid');
     return await privsCategories.isAdminOrMod(cid, uid);
 };
+
+privsTopics.canEndorse = async function (tid, uid) {
+    return await privsTopics.isAdminOrMod(tid, uid);
+}
 
 privsTopics.canViewDeletedScheduled = function (topic, privileges = {}, viewDeleted = false, viewScheduled = false) {
     if (!topic) {
