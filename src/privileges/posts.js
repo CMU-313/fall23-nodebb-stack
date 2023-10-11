@@ -28,7 +28,7 @@ privsPosts.get = async function (pids, uid) {
         isInstructor: user.accounttype === 'instructor',
         isOwner: posts.isOwner(pids, uid),
         'topics:read': helpers.isAllowedTo('topics:read', uid, uniqueCids),
-        'topics:endorse': helpers.isAllowedTo('topics:endorse', uid, uniqueCids),
+        'topics:endorse': isInstructor,
         read: helpers.isAllowedTo('read', uid, uniqueCids),
         'posts:edit': helpers.isAllowedTo('posts:edit', uid, uniqueCids),
         'posts:history': helpers.isAllowedTo('posts:history', uid, uniqueCids),
@@ -38,7 +38,7 @@ privsPosts.get = async function (pids, uid) {
     const isModerator = _.zipObject(uniqueCids, results.isModerator);
     const privData = {};
     privData['topics:read'] = _.zipObject(uniqueCids, results['topics:read']);
-    privData['topics:endorse'] = _.zipObject(uniqueCids, results['topics:endorse']);
+    // privData['topics:endorse'] = _.zipObject(uniqueCids, results['topics:endorse']);
     privData.read = _.zipObject(uniqueCids, results.read);
     privData['posts:edit'] = _.zipObject(uniqueCids, results['posts:edit']);
     privData['posts:history'] = _.zipObject(uniqueCids, results['posts:history']);

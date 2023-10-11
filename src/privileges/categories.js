@@ -21,6 +21,7 @@ const _privilegeMap = new Map([
     ['find', { label: '[[admin/manage/privileges:find-category]]' }],
     ['read', { label: '[[admin/manage/privileges:access-category]]' }],
     ['topics:read', { label: '[[admin/manage/privileges:access-topics]]' }],
+    ['topics:endorse', { label: '[[admin/manage/privileges:endorse-topics]]' }],
     ['topics:create', { label: '[[admin/manage/privileges:create-topics]]' }],
     ['topics:reply', { label: '[[admin/manage/privileges:reply-to-topics]]' }],
     ['topics:schedule', { label: '[[admin/manage/privileges:schedule-topics]]' }],
