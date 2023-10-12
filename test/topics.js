@@ -2835,11 +2835,18 @@ describe('Topic\'s', () => {
         const privileges = require('../src/privileges');
 
         it('should allow admins to endorse', () => {
-            assert(privileges.topics.canEndorse(adminUid, topic.tid));
+            assert(privileges.topics.canEndorse(topic.tid, adminUid));
         });
 
-        it('should not allow non-admins to endorse', () => {
-            assert(!privileges.topics.canEndorse(fooUid, topic.tid));
+        it('should allow global moderators to endorse', async () => {
+            const globalModUid = await User.create({ username: 'global mod' });
+            await groups.join('Global Moderators', globalModUid);
+            assert(privileges.topics.canEndorse(topic.tid, globalModUid));
+        });
+
+        it('should not allow non-admins and non-moderators to endorse', async () => {
+            const tempUid = await User.create({ username: 'temp', password: 'abcd1234' });
+            assert(!privileges.topics.canEndorse(topic.tid, tempUid));
         });
     });
 });
