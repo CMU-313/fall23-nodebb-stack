@@ -31,7 +31,10 @@ define('topicList', [
         loadTopicsCallback = cb || loadTopicsAfter;
 
         categoryTools.init();
-        handleSearch("query");
+        $('#post-search').on('input propertychange', utils.debounce(async function () {
+            const query = $('#post-search').val();
+            handleSearch(query);
+        }, 250));
 
         TopicList.watchForNewPosts();
         const states = ['watching'];
@@ -68,7 +71,7 @@ define('topicList', [
 
         hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
     };
-    
+
     function resetSearch(topics, replace, callback) {
         callback = callback || function () { };
         app.parseAndTranslate('partials/topics_list', 'topics', { topics: topics }, function (html) {
@@ -235,7 +238,7 @@ define('topicList', [
     }
 
     function loadTopicsAfter(after, direction, callback) {
-        callback = callback || function () {};
+        callback = callback || function () { };
         const query = utils.params();
         query.page = calculateNextPage(after, direction);
         infinitescroll.loadMoreXhr(query, callback);
