@@ -415,3 +415,26 @@ describe('post uploads management', () => {
         });
     });
 });
+
+describe('post successfully endorses', () => {
+
+    it('it should toggle endorsements', (done) => {
+        posts.toggleEndorsement (0, 12, 13)
+        assert (post.endorsements.strictEqual(1))
+    });
+
+    it('it should unendorse', (done) => {
+        posts.unendorse (0, 12, 13)
+        assert (post.endorsements.strictEqual(0))
+    });
+
+    it('it unendorse', (done) => {
+        posts.endorse (0, 12, 13)
+        assert (post.endorsements.strictEqual(1))
+    });
+
+    it('it should update endorsement data', (done) => {
+        posts.updateEndorsementVoteCount ([{12 : 20}])
+        assert (post.endorsements.getbyPid(12).endorsementnumber.strictEqual(1))
+    });
+});
