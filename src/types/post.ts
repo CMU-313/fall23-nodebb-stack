@@ -18,4 +18,9 @@ export type PostObject = {
   category: CategoryObject;
   isMainPost: boolean;
   replies: number;
+  endorsements : number;
+  endorseVotes : number;
+  endorseVotesRev : number;
+  endorsePid : number;
+  endorsePidRev : number;
 };
