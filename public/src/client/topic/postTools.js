@@ -89,7 +89,7 @@ define('forum/topic/postTools', [
         const postContainer = components.get('topic');
 
         handleSelectionTooltip();
-        
+
         postContainer.on('click', '[component="post/quote"]', function () {
             onQuoteClicked($(this), tid);
         });
@@ -259,23 +259,24 @@ define('forum/topic/postTools', [
         });
     }
 
-    async function onEndorseClicked(button, tid) {
-        const selectedNode = await getSelectedNode();
+    async function onEndorseClicked() {
+        // return;
+        // const selectedNode = await getSelectedNode();
 
-        showStaleWarning(async function () {
-            let username = await getUserSlug(button);
-            if (getData(button, 'data-uid') === '0' || !getData(button, 'data-userslug')) {
-                username = '';
-            }
+        // showStaleWarning(async function () {
+        //     let username = await getUserSlug(button);
+        //     if (getData(button, 'data-uid') === '0' || !getData(button, 'data-userslug')) {
+        //         username = '';
+        //     }
 
-            const toPid = button.is('[component="post/endorse"]') ? getData(button, 'data-pid') : null;
-            const isQuoteToPid = !toPid || !selectedNode.pid || toPid === selectedNode.pid;
+        //     const toPid = button.is('[component="post/endorse"]') ? getData(button, 'data-pid') : null;
+        //     const isQuoteToPid = !toPid || !selectedNode.pid || toPid === selectedNode.pid;
 
-            if (selectedNode.text && isQuoteToPid) {
-                post.endorsements += 1;
-                post.isEndorsed = True;
-            }
-        });
+        //     if (selectedNode.text && isQuoteToPid) {
+        //         post.endorsements += 1;
+        //         post.isEndorsed = true;
+        //     }
+        // });
     }
 
     async function onReplyClicked(button, tid) {

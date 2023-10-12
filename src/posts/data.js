@@ -64,8 +64,7 @@ function modifyPost(post, fields) {
         if (post.hasOwnProperty('endorsements') && post.hasOwnProperty('isEndorsed')) {
             if (post.endorsements > 0) {
                 post.isEndorsed = true;
-            }
-            else {
+            } else {
                 post.isEndorsed = false;
             }
         }

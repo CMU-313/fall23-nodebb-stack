@@ -19,7 +19,7 @@ privsTopics.get = async function (tid, uid) {
     const privs = [
         'topics:reply', 'topics:read', 'topics:schedule', 'topics:tag',
         'topics:delete', 'posts:edit', 'posts:history',
-        'posts:delete', 'posts:view_deleted', 'read', 'purge', 'topics:endorse'
+        'posts:delete', 'posts:view_deleted', 'read', 'purge', 'topics:endorse',
     ];
     const topicData = await topics.getTopicFields(tid, ['cid', 'uid', 'locked', 'deleted', 'scheduled']);
     const [userPrivileges, isAdministrator, isModerator, disabled] = await Promise.all([
@@ -180,7 +180,7 @@ privsTopics.isAdminOrMod = async function (tid, uid) {
 
 privsTopics.canEndorse = async function (tid, uid) {
     return await privsTopics.isAdminOrMod(tid, uid);
-}
+};
 
 privsTopics.canViewDeletedScheduled = function (topic, privileges = {}, viewDeleted = false, viewScheduled = false) {
     if (!topic) {
