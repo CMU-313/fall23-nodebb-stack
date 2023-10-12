@@ -94,7 +94,7 @@ define('topicList', [
         });
         onSearchLoaded(subTopics, true);
         return subTopics;
-    };
+    }
 
     function onSearchLoaded(topics, replace, callback) {
         callback = callback || function () { };
