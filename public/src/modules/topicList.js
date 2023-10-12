@@ -68,9 +68,21 @@ define('topicList', [
 
         hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
     };
+    
+    function resetSearch(topics, replace, callback) {
+        callback = callback || function () { };
+        app.parseAndTranslate('partials/topics_list', 'topics', { topics: topics }, function (html) {
+            $('.topic-list')[replace ? 'html' : 'append'](html);
+            utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
+            callback();
+        });
+    }
+
     async function handleSearch(query) {
         const allTopics = ajaxify.data.topics;
-        
+        if (!query.length) {
+            resetSearch(allTopics, true);
+        }
         const subTopics = [];
         allTopics.forEach((t) => {
             if (t.title === query) {
