@@ -9,6 +9,7 @@ define('topicList', [
     'hooks',
 ], function (infinitescroll, handleBack, topicSelect, categoryFilter, categoryTools, hooks) {
     const TopicList = {};
+    
     let templateName = '';
 
     let newTopicCount = 0;
