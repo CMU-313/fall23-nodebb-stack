@@ -87,4 +87,3 @@ function redirectToChat(req, res, next) {
     });
 }
 exports.redirectToChat = redirectToChat;
-
