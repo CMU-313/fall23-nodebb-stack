@@ -726,6 +726,7 @@ describe('Categories', () => {
                     'topics:create': false,
                     'topics:tag': false,
                     'topics:delete': false,
+                    'topics:endorse': false,
                     'topics:schedule': false,
                     'posts:edit': false,
                     'posts:history': false,
