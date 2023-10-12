@@ -2830,6 +2830,14 @@ describe('Topic\'s', () => {
             assert(!score);
         });
     });
+
+    describe('endorse privileges', () => {
+        const privileges = require('../src/privileges');
+
+        it('should allow admins to endorse', () => {
+            assert(privileges.topics.canEndorse(adminUid, topic.tid));
+        });
+    });
 });
 
 describe('Topics\'', async () => {
