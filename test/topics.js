@@ -2837,6 +2837,10 @@ describe('Topic\'s', () => {
         it('should allow admins to endorse', () => {
             assert(privileges.topics.canEndorse(adminUid, topic.tid));
         });
+
+        it('should not allow non-admins to endorse', () => {
+            assert(!privileges.topics.canEndorse(fooUid, topic.tid));
+        });
     });
 });
 
