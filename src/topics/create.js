@@ -117,6 +117,7 @@ module.exports = function (Topics) {
         postData.tid = tid;
         postData.ip = data.req ? data.req.ip : null;
         postData.isMain = true;
+        postData.isEndorsed = false;
         postData = await posts.create(postData);
         postData = await onNewPost(postData, data);
 

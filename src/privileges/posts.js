@@ -72,6 +72,20 @@ privsPosts.can = async function (privilege, pid, uid) {
     return await privsCategories.can(privilege, cid, uid);
 };
 
+/* NOTE: the following is commented out due to buggy implementation
+
+should increment the count of endorsements, and modify other isEndorsed based on that change
+
+privPosts.endorsePost = async function (privilege, pid, uid) {
+    const cid = await posts.getCidByPid(pid);
+    if (await privsCategories.can(privilege, cid, uid)) {
+        const postData = await posts.getPostField(pid, ['endorsements']);
+        postData.setPostField(pids, ['endorsements'], postData);
+        modifyPost(pids, ['isEndorsed', 'endorsements']);
+    }
+} 
+*/
+
 privsPosts.filter = async function (privilege, pids, uid) {
     if (!Array.isArray(pids) || !pids.length) {
         return [];
