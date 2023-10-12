@@ -179,7 +179,11 @@ privsTopics.isAdminOrMod = async function (tid, uid) {
 };
 
 privsTopics.canEndorse = async function (tid, uid) {
-    return await privsTopics.isAdminOrMod(tid, uid);
+    if (parseInt(uid, 10) <= 0) {
+        return false;
+    }
+    const cid = await topics.getTopicField(tid, 'cid');
+    return await privsCategories.isAdminOrMod(cid, uid);
 };
 
 privsTopics.canViewDeletedScheduled = function (topic, privileges = {}, viewDeleted = false, viewScheduled = false) {

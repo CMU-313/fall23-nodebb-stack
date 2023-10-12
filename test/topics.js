@@ -36,6 +36,7 @@ describe('Topic\'s', () => {
     let adminJar;
     let csrf_token;
     let fooUid;
+    let tempUid;
 
     before(async () => {
         adminUid = await User.create({ username: 'admin', password: '123456' });
@@ -2845,7 +2846,8 @@ describe('Topic\'s', () => {
         });
 
         it('should not allow non-admins and non-moderators to endorse', async () => {
-            const tempUid = await User.create({ username: 'temp', password: 'abcd1234' });
+            tempUid = await User.create({ username: 'temp', password: 'temp1234' });
+            console.log(tempUid);
             assert(!privileges.topics.canEndorse(topic.tid, tempUid));
         });
     });
