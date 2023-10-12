@@ -83,8 +83,7 @@ privPosts.endorsePost = async function (privilege, pid, uid) {
         postData.setPostField(pids, ['endorsements'], postData);
         modifyPost(pids, ['isEndorsed', 'endorsements']);
     }
-} 
-*/
+} */
 
 privsPosts.filter = async function (privilege, pids, uid) {
     if (!Array.isArray(pids) || !pids.length) {
