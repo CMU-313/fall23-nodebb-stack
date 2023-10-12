@@ -777,6 +777,7 @@ describe('Categories', () => {
                     'groups:posts:upvote': true,
                     'groups:posts:downvote': true,
                     'groups:topics:delete': false,
+                    'groups:topics:endorse': false,
                     'groups:topics:create': true,
                     'groups:topics:reply': true,
                     'groups:topics:tag': true,
