@@ -21,7 +21,7 @@ privsPosts.get = async function (pids, uid) {
     }
     const cids = await posts.getCidsByPids(pids);
     const uniqueCids = _.uniq(cids);
-    // const userData = await user.getUserData(uid);
+    const userData = await user.getUserData(uid);
 
     const results = await utils.promiseParallel({
         isAdmin: user.isAdministrator(uid),

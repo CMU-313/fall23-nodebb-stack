@@ -83,7 +83,7 @@ privsCategories.list = async function (cid) {
 privsCategories.get = async function (cid, uid) {
     const privs = [
         'topics:create', 'topics:read', 'topics:schedule',
-        'topics:tag', 'read', 'posts:view_deleted', 'topics:endorse',
+        'topics:tag', 'read', 'posts:view_deleted', 'topics:endorse'
     ];
 
     const [userPrivileges, isAdministrator, isModerator] = await Promise.all([

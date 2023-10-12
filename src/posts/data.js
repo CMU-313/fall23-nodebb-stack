@@ -62,8 +62,12 @@ function modifyPost(post, fields) {
             post.votes = post.upvotes - post.downvotes;
         }
         if (post.hasOwnProperty('endorsements') && post.hasOwnProperty('isEndorsed')) {
-            if (post.endorsements > 0) post.isEndorsed = true;
-            else post.isEndorsed = false;
+            if (post.endorsements > 0) {
+                post.isEndorsed = true;
+            }
+            else {
+                post.isEndorsed = false;
+            }
         }
         if (post.hasOwnProperty('timestamp')) {
             post.timestampISO = utils.toISOString(post.timestamp);
