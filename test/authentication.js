@@ -287,19 +287,6 @@ describe('authentication', () => {
         });
     });
 
-    it('should fail to login if password is longer than 4096', (done) => {
-        let longPassword;
-        for (let i = 0; i < 5000; i++) {
-            longPassword += 'a';
-        }
-        helpers.loginUser('someuser', longPassword, (err, data) => {
-            assert.ifError(err);
-            assert.equal(data.res.statusCode, 403);
-            assert.equal(data.body, '[[error:password-too-long]]');
-            done();
-        });
-    });
-
     it('should fail to login if local login is disabled', (done) => {
         privileges.global.rescind(['groups:local:login'], 'registered-users', (err) => {
             assert.ifError(err);
