@@ -70,7 +70,15 @@ define('topicList', [
     };
     async function handleSearch(query) {
         const allTopics = ajaxify.data.topics;
-
+        
+        const subTopics = [];
+        allTopics.forEach((t) => {
+            if (t.title === query) {
+                subTopics.push(t);
+            }
+        });
+        
+        return subTopics;
     };
 
     function findTopicListElement() {
@@ -206,7 +214,7 @@ define('topicList', [
     }
 
     function loadTopicsAfter(after, direction, callback) {
-        callback = callback || function () { };
+        callback = callback || function () {};
         const query = utils.params();
         query.page = calculateNextPage(after, direction);
         infinitescroll.loadMoreXhr(query, callback);
