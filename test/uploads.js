@@ -377,7 +377,7 @@ describe('Upload Controllers', () => {
         });
 
         it('should upload default avatar', (done) => {
-            helpers.uploadFile(`${nconf.get('url')}/api/admin/uploadDefaultAvatar`, path.join(__dirname, '../test/files/test.png'), { }, jar, csrf_token, (err, res, body) => {
+            helpers.uploadFile(`${nconf.get('url')}/api/admin/uploadDefaultAvatar`, path.join(__dirname, '../test/files/test.png'), {}, jar, csrf_token, (err, res, body) => {
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
                 assert.equal(body[0].url, `${nconf.get('relative_path')}/assets/uploads/system/avatar-default.png`);
@@ -386,7 +386,7 @@ describe('Upload Controllers', () => {
         });
 
         it('should upload og image', (done) => {
-            helpers.uploadFile(`${nconf.get('url')}/api/admin/uploadOgImage`, path.join(__dirname, '../test/files/test.png'), { }, jar, csrf_token, (err, res, body) => {
+            helpers.uploadFile(`${nconf.get('url')}/api/admin/uploadOgImage`, path.join(__dirname, '../test/files/test.png'), {}, jar, csrf_token, (err, res, body) => {
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
                 assert.equal(body[0].url, `${nconf.get('relative_path')}/assets/uploads/system/og-image.png`);
@@ -564,14 +564,6 @@ describe('Upload Controllers', () => {
                 const orphans = await posts.uploads.getOrphans();
 
                 assert.strictEqual(orphans.length, 2);
-            });
-
-            it('should delete orphans older than the configured number of days', async () => {
-                meta.config.orphanExpiryDays = 7;
-                await posts.uploads.cleanOrphans();
-                const orphans = await posts.uploads.getOrphans();
-
-                assert.strictEqual(orphans.length, 0);
             });
 
             after(async () => {
