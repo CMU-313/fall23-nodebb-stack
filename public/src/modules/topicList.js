@@ -26,6 +26,10 @@ define('topicList', [
 
     TopicList.init = function (template, cb) {
         topicListEl = findTopicListElement();
+        $('#post-search').on('input propertychange', utils.debounce(async function () {
+            const query = $('#post-search').val();
+            TopicList.handleSearch(query);
+        }, 250));
 
         templateName = template;
         loadTopicsCallback = cb || loadTopicsAfter;
@@ -67,6 +71,39 @@ define('topicList', [
 
         hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics });
     };
+
+    function resetSearch(topics, replace, callback) {
+        callback = callback || function () { };
+        app.parseAndTranslate('partials/topics_list', 'topics', { topics: topics }, function (html) {
+            $('.topic-list')[replace ? 'html' : 'append'](html);
+            utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
+            callback();
+        });
+    }
+
+    TopicList.handleSearch = async function (query) {
+        const allTopics = ajaxify.data.topics;
+        if (!query.length) {
+            resetSearch(allTopics, true);
+        }
+        const subTopics = [];
+        allTopics.forEach((t) => {
+            if (t.title === query) {
+                subTopics.push(t);
+            }
+        });
+        onSearchLoaded(subTopics, true);
+        return subTopics;
+    };
+
+    function onSearchLoaded(topics, replace, callback) {
+        callback = callback || function () { };
+        app.parseAndTranslate('partials/topics_list', 'topics', { topics: topics }, function (html) {
+            $('.topic-list')[replace ? 'html' : 'append'](html);
+            utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
+            callback();
+        });
+    }
 
     function findTopicListElement() {
         return $('[component="category"]').filter(function (i, e) {
@@ -201,7 +238,7 @@ define('topicList', [
     }
 
     function loadTopicsAfter(after, direction, callback) {
-        callback = callback || function () {};
+        callback = callback || function () { };
         const query = utils.params();
         query.page = calculateNextPage(after, direction);
         infinitescroll.loadMoreXhr(query, callback);
