@@ -8,10 +8,10 @@
   },
   "include": [
     "public/src/**/*",
-    "src/**/*",
+    "src/**/*", 
     "test/**/*",
   ],
-  "exclude": [
+  "exclude":[
     "node_modules",
   ]
 }
