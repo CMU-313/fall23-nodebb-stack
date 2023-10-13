@@ -36,6 +36,7 @@ describe('Topic\'s', () => {
     let adminJar;
     let csrf_token;
     let fooUid;
+    let tempUid;
 
     before(async () => {
         adminUid = await User.create({ username: 'admin', password: '123456' });
@@ -2828,6 +2829,26 @@ describe('Topic\'s', () => {
         it('should remove from topics:scheduled on purge', async () => {
             const score = await db.sortedSetScore('topics:scheduled', topicData.tid);
             assert(!score);
+        });
+    });
+
+    describe('endorse privileges', () => {
+        const privileges = require('../src/privileges');
+
+        it('should allow admins to endorse', () => {
+            assert(privileges.topics.canEndorse(topic.tid, adminUid));
+        });
+
+        it('should allow global moderators to endorse', async () => {
+            const globalModUid = await User.create({ username: 'global mod' });
+            await groups.join('Global Moderators', globalModUid);
+            assert(privileges.topics.canEndorse(topic.tid, globalModUid));
+        });
+
+        it('should not allow non-admins and non-moderators to endorse', async () => {
+            tempUid = await User.create({ username: 'temp', password: 'temp1234' });
+            console.log(tempUid);
+            assert(!privileges.topics.canEndorse(topic.tid, tempUid));
         });
     });
 });

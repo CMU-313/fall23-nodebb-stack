@@ -1228,6 +1228,30 @@ describe('Post\'s', () => {
             });
         });
     });
+
+    /* NOTE: the following is commented out due to .endorsePost() being commented out as well.
+
+    describe('Endorsing', () => {
+
+        it('should cause a non-endorsed post to become endorsed', async () => {
+            const currentEndorsement = postData.endorsements;
+            assert(!postData.isEndorsed);
+            posts.endorsePost('endorse', postData.pid, globalModUid);
+            assert.strictEqual(postsData.endorsements, currenEndorsement + 1);
+            assert(postData.isEndorsed);
+        });
+
+        it('should not cause changes if privileges don't allow endorsing', async () => {
+            const newUid = await user.create({ username: 'temp' });
+            const currentEndorsement = postData.endorsements;
+            assert(!postData.isEndorsed);
+            posts.endorsePost('endorse', postData.pid, newUid);
+            assert.strictEqual(postsData.endorsements, currentEndorsement);
+            assert(!postData.isEndorsed);
+        });
+
+    });
+    */
 });
 
 describe('Posts\'', async () => {

@@ -21,6 +21,7 @@ const _privilegeMap = new Map([
     ['find', { label: '[[admin/manage/privileges:find-category]]' }],
     ['read', { label: '[[admin/manage/privileges:access-category]]' }],
     ['topics:read', { label: '[[admin/manage/privileges:access-topics]]' }],
+    ['topics:endorse', { label: '[[admin/manage/privileges:endorse-topics]]' }],
     ['topics:create', { label: '[[admin/manage/privileges:create-topics]]' }],
     ['topics:reply', { label: '[[admin/manage/privileges:reply-to-topics]]' }],
     ['topics:schedule', { label: '[[admin/manage/privileges:schedule-topics]]' }],
@@ -82,7 +83,7 @@ privsCategories.list = async function (cid) {
 privsCategories.get = async function (cid, uid) {
     const privs = [
         'topics:create', 'topics:read', 'topics:schedule',
-        'topics:tag', 'read', 'posts:view_deleted',
+        'topics:tag', 'read', 'posts:view_deleted', 'topics:endorse',
     ];
 
     const [userPrivileges, isAdministrator, isModerator] = await Promise.all([

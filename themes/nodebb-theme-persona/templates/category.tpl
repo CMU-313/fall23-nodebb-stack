@@ -4,9 +4,14 @@
     {{widgets.header.html}}
     {{{end}}}
 </div>
+
 <div class="row">
     <div class="category <!-- IF widgets.sidebar.length -->col-lg-9 col-sm-12<!-- ELSE -->col-lg-12<!-- ENDIF widgets.sidebar.length -->">
         <!-- IMPORT partials/category/subcategory.tpl -->
+
+        <div class="folder-list-header">
+            <!-- IMPORT partials/category/files.tpl -->
+        </div>
 
         <div class="topic-list-header clearfix">
             <!-- IF privileges.topics:create -->

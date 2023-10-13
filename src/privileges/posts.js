@@ -21,12 +21,15 @@ privsPosts.get = async function (pids, uid) {
     }
     const cids = await posts.getCidsByPids(pids);
     const uniqueCids = _.uniq(cids);
+    // const userData = await user.getUserData(uid);
 
     const results = await utils.promiseParallel({
         isAdmin: user.isAdministrator(uid),
         isModerator: user.isModerator(uid, uniqueCids),
+        // isInstructor: user.accounttype === 'instructor',
         isOwner: posts.isOwner(pids, uid),
         'topics:read': helpers.isAllowedTo('topics:read', uid, uniqueCids),
+        'topics:endorse': helpers.isAllowedTo('topics:endorse', uid, uniqueCids),
         read: helpers.isAllowedTo('read', uid, uniqueCids),
         'posts:edit': helpers.isAllowedTo('posts:edit', uid, uniqueCids),
         'posts:history': helpers.isAllowedTo('posts:history', uid, uniqueCids),
@@ -36,6 +39,7 @@ privsPosts.get = async function (pids, uid) {
     const isModerator = _.zipObject(uniqueCids, results.isModerator);
     const privData = {};
     privData['topics:read'] = _.zipObject(uniqueCids, results['topics:read']);
+    privData['topics:endorse'] = _.zipObject(uniqueCids, results['topics:endorse']);
     privData.read = _.zipObject(uniqueCids, results.read);
     privData['posts:edit'] = _.zipObject(uniqueCids, results['posts:edit']);
     privData['posts:history'] = _.zipObject(uniqueCids, results['posts:history']);
@@ -47,11 +51,13 @@ privsPosts.get = async function (pids, uid) {
         const viewDeletedPosts = results.isOwner[i] || privData['posts:view_deleted'][cid] || results.isAdmin;
         const viewHistory = results.isOwner[i] || privData['posts:history'][cid] || results.isAdmin;
 
+
         return {
             editable: editable,
             move: isAdminOrMod,
             isAdminOrMod: isAdminOrMod,
             'topics:read': privData['topics:read'][cid] || results.isAdmin,
+            'topics:endorse': isAdminOrMod,
             read: privData.read[cid] || results.isAdmin,
             'posts:history': viewHistory,
             'posts:view_deleted': viewDeletedPosts,
@@ -65,6 +71,19 @@ privsPosts.can = async function (privilege, pid, uid) {
     const cid = await posts.getCidByPid(pid);
     return await privsCategories.can(privilege, cid, uid);
 };
+
+/* NOTE: the following is commented out due to buggy implementation
+
+should increment the count of endorsements, and modify other isEndorsed based on that change
+
+privPosts.endorsePost = async function (privilege, pid, uid) {
+    const cid = await posts.getCidByPid(pid);
+    if (await privsCategories.can(privilege, cid, uid)) {
+        const postData = await posts.getPostField(pid, ['endorsements']);
+        postData.setPostField(pids, ['endorsements'], postData);
+        modifyPost(pids, ['isEndorsed', 'endorsements']);
+    }
+} */
 
 privsPosts.filter = async function (privilege, pids, uid) {
     if (!Array.isArray(pids) || !pids.length) {
