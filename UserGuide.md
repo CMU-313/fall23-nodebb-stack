@@ -18,7 +18,8 @@ have been endorsed.
 ! [Picture of an endorsed post, distinguished from other posts 
 by the green text at the bottom stating that the post has been 
 endorsed by an instructor.] (/assets/endorsed_post.png)
-
+4. The endorsed posts will show up first when posts are searched,
+   before all of the unendorsed ones.
 
 ## User testing the feature
 
@@ -28,7 +29,7 @@ User testing the feature would include two main actions:
 only the instructor can see the option to endorse a post.
 2. Endorsing the post as an instructor causes the indicator to 
 show up.
-
+3. Endorsed posts are shown first.
 
 ## Testing
 
@@ -64,6 +65,13 @@ these tests did so by grabbing the field parameters
 `isEndorsed` and `endorsements` of the post before the 
 modification, and comparing it the updated fields after the 
 function `.endorsePost()` was called.
+
+### Endorsement Prioritization
+
+The code for the endorsed post prioritization cannot be fully 
+tested as the backend isn't fully connected. Additionally this 
+feature will break with large numbers of instructors. Therefore,
+no unit tests could be written. This is a shortocming of the project.
 
 ## Why the tests were sufficient
 
