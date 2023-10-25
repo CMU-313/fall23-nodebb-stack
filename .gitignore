@@ -69,6 +69,8 @@ test/files/normalise-resized.jpg
 *.mongodb
 link-plugins.sh
 test.sh
+package.json
+package-lock.json
 
 # Theme ignore
 theme/*.css
