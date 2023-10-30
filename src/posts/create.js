@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 
+const Iroh = require('iroh');
 const meta = require('../meta');
 const db = require('../database');
 const plugins = require('../plugins');
@@ -10,61 +11,28 @@ const topics = require('../topics');
 const categories = require('../categories');
 const groups = require('../groups');
 const utils = require('../utils');
-const Iroh = require('iroh');
+
 
 module.exports = function (Posts) {
-
-
     Posts.create = async function (data) {
-
-        let code = `let foo = 42`;
-        var stage = new Iroh.Stage(code);
-        // create a listener
-        let listener = stage.addListener(Iroh.VAR);
-        // jump in *after* the variable got created
-        listener.on("after", (e) => {
-        // this logs the variable's 'name' and 'value'
-        console.log(e.name, "=>", e.value); // prints "foo => 42"
-        });
-
-        eval(stage.script);
-
-        let code2 = `if (true) {
-            for (let ii = 0; ii < 3; ++ii) {
-              let a = ii * 2;
-            };
-          }`
-          
-        stage = new Iroh.Stage(code2);
-        stage.addListener(Iroh.LOOP)
-        .on("enter", function(e) {
-            // we enter the loop
-            console.log(" ".repeat(e.indent) + "loop enter");
-        })
-        .on("leave", function(e) {
-            // we leave the loop
-            console.log(" ".repeat(e.indent) + "loop leave");
-        });
-          
-        // if, else if
-        stage.addListener(Iroh.IF)
-        .on("enter", function(e) {
-        // we enter the if
-        console.log(" ".repeat(e.indent) + "if enter");
-        })
-        .on("leave", function(e) {
-        // we leave the if
-        console.log(" ".repeat(e.indent) + "if leave");
-        });
-
-        eval(stage.script);
-
         // This is an internal method, consider using Topics.reply instead
         const { uid } = data;
         const { tid } = data;
         const content = data.content.toString();
         const timestamp = data.timestamp || Date.now();
         const isMain = data.isMain || false;
+
+        const code = `data.isMain || false;`;
+        const stage = new Iroh.Stage(code);
+        // create a listener
+        const listener = stage.addListener(Iroh.VAR);
+        // jump in *after* the variable got created
+        listener.on('after', (e) => {
+        // this logs the variable's 'name' and 'value'
+            console.log(e.name, '=>', e.value);
+        });
+        // eslint-disable-next-line
+        eval(stage.script);
 
         if (!uid && parseInt(uid, 10) !== 0) {
             throw new Error('[[error:invalid-uid]]');

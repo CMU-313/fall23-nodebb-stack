@@ -9,50 +9,9 @@ const privileges = require('../privileges');
 const utils = require('../utils');
 const slugify = require('../slugify');
 const cache = require('../cache');
-const Iroh = require ('iroh')
 
 module.exports = function (Categories) {
     Categories.create = async function (data) {
-
-        let code = `let foo = 42`;
-        var stage = new Iroh.Stage(code);
-        // create a listener
-        let listener = stage.addListener(Iroh.VAR);
-        // jump in *after* the variable got created
-        listener.on("after", (e) => {
-        // this logs the variable's 'name' and 'value'
-        console.log(e.name, "=>", e.value); // prints "foo => 42"
-        });
-
-        let code2 = `if (true) {
-            for (let ii = 0; ii < 3; ++ii) {
-              let a = ii * 2;
-            };
-          }`
-          
-        stage = new Iroh.Stage(code2);
-        stage.addListener(Iroh.LOOP)
-        .on("enter", function(e) {
-            // we enter the loop
-            console.log(" ".repeat(e.indent) + "loop enter");
-        })
-        .on("leave", function(e) {
-            // we leave the loop
-            console.log(" ".repeat(e.indent) + "loop leave");
-        });
-          
-        // if, else if
-        stage.addListener(Iroh.IF)
-        .on("enter", function(e) {
-        // we enter the if
-        console.log(" ".repeat(e.indent) + "if enter");
-        })
-        .on("leave", function(e) {
-        // we leave the if
-        console.log(" ".repeat(e.indent) + "if leave");
-        });
-
-
         const parentCid = data.parentCid ? data.parentCid : 0;
         const [cid, firstChild] = await Promise.all([
             db.incrObjectField('global', 'nextCid'),
