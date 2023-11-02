@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 
+const Iroh = require('iroh');
 const meta = require('../meta');
 const db = require('../database');
 const plugins = require('../plugins');
@@ -11,6 +12,7 @@ const categories = require('../categories');
 const groups = require('../groups');
 const utils = require('../utils');
 
+
 module.exports = function (Posts) {
     Posts.create = async function (data) {
         // This is an internal method, consider using Topics.reply instead
@@ -19,6 +21,18 @@ module.exports = function (Posts) {
         const content = data.content.toString();
         const timestamp = data.timestamp || Date.now();
         const isMain = data.isMain || false;
+
+        const code = `data.isMain || false;`;
+        const stage = new Iroh.Stage(code);
+        // create a listener
+        const listener = stage.addListener(Iroh.VAR);
+        // jump in *after* the variable got created
+        listener.on('after', (e) => {
+        // this logs the variable's 'name' and 'value'
+            console.log(e.name, '=>', e.value);
+        });
+        // eslint-disable-next-line
+        eval(stage.script);
 
         if (!uid && parseInt(uid, 10) !== 0) {
             throw new Error('[[error:invalid-uid]]');
