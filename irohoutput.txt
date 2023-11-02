@@ -1,0 +1,11 @@
+2023-10-25T21:39:50.925Z [4567/7802] - info: [api] Adding 0 route(s) to `api/v3/plugins`
+2023-10-25T21:39:50.939Z [4567/7802] - info: [router] Routes added
+2023-10-25T21:39:50.941Z [4567/7802] - info: 🎉 NodeBB Ready
+2023-10-25T21:39:50.942Z [4567/7802] - info: 🤝 Enabling 'trust proxy'
+2023-10-25T21:39:50.944Z [4567/7802] - info: 📡 NodeBB is now listening on: 0.0.0.0:4567
+2023-10-25T21:39:50.944Z [4567/7802] - info: 🔗 Canonical URL: http://127.0.0.1:4567
+foo => 42
+ if enter
+  loop enter
+  loop leave
+ if leave
